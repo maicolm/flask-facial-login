@@ -1,6 +1,7 @@
 # ----------------------------------------------
 # app.py: Archivo principal de la aplicación Flask
 # ----------------------------------------------
+from flask_cors import CORS
 from flask import Flask
 from routes.auth_routes import auth_bp         # Blueprint para autenticación (login, logout)
 from routes.registro_routes import registro_bp # Blueprint para registro facial
@@ -11,6 +12,8 @@ from routes.usuario_routes import usuario_bp   # ✅ NUEVO: Blueprint para CRUD 
 # Inicializamos la aplicación Flask
 # ----------------------------------------------
 app = Flask(__name__)
+app = Flask(__name__)
+CORS(app)
 app.secret_key = 'mi_clave_secreta'  # Clave para manejar sesiones seguras
 
 # ----------------------------------------------
