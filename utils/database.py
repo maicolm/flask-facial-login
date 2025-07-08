@@ -19,3 +19,18 @@ def get_db_connection():
     except Error as e:
         print(f"Error al conectar a la base de datos: {e}")
         return None
+
+def obtener_rol_usuario(id_usuario):
+    try:
+        connection = get_db_connection()
+        if connection is None:
+            return None
+        cursor = connection.cursor()
+        cursor.execute("SELECT rol FROM usuarios WHERE id_usuario = %s", (id_usuario,))
+        resultado = cursor.fetchone()
+        cursor.close()
+        connection.close()
+        return resultado[0] if resultado else None
+    except Exception as e:
+        print(f"Error al obtener rol: {e}")
+        return None
