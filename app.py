@@ -12,8 +12,8 @@ from routes.usuario_routes import usuario_bp   # ✅ NUEVO: Blueprint para CRUD 
 # Inicializamos la aplicación Flask
 # ----------------------------------------------
 app = Flask(__name__)
-app = Flask(__name__)
-CORS(app)
+#CORS(app)
+CORS(app, resources={r"/api/*": {"origins": "*"}})
 app.secret_key = 'mi_clave_secreta'  # Clave para manejar sesiones seguras
 
 # ----------------------------------------------
