@@ -6,6 +6,7 @@ from flask import Flask
 from routes.auth_routes import auth_bp         # Blueprint para autenticación (login, logout)
 from routes.registro_routes import registro_bp # Blueprint para registro facial
 from routes.usuario_routes import usuario_bp   # ✅ NUEVO: Blueprint para CRUD de usuarios
+from routes.api_routes import api_bp
 
 
 # ----------------------------------------------
@@ -19,9 +20,11 @@ app.secret_key = 'mi_clave_secreta'  # Clave para manejar sesiones seguras
 # ----------------------------------------------
 # Registramos los blueprints (rutas modulares)
 # ----------------------------------------------
+# Registramos los blueprints (rutas modulares)
 app.register_blueprint(auth_bp)
 app.register_blueprint(registro_bp)
-app.register_blueprint(usuario_bp)  # ✅ Se registra el CRUD de usuarios
+app.register_blueprint(usuario_bp)
+app.register_blueprint(api_bp)  # <-- ESTE ES EL QUE FALTABA
 
 
 # ----------------------------------------------
