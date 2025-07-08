@@ -2,8 +2,11 @@ services:
   - type: web
     name: facial-login-app
     env: python
-    buildCommand: "pip install -r requirements.txt"
-    startCommand: "gunicorn app:app"
+    buildCommand: |
+      echo "Using runtime version:"
+      cat runtime.txt
+      pip install -r requirements.txt
+    startCommand: gunicorn app:app
     envVars:
       - key: FLASK_ENV
         value: production
