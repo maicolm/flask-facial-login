@@ -1,0 +1,12 @@
+# Entornos virtuales
+venv/
+
+# Cache de Python
+__pycache__/
+*.pyc
+
+# Variables sensibles
+.env
+
+# Archivos de sistema
+.DS_Store
