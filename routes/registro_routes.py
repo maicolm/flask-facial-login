@@ -14,7 +14,8 @@ from utils.face_processing import decode_image, save_image, entrenar_modelo, car
 # Definimos correctamente el blueprint
 registro_bp = Blueprint('registro_bp', __name__)
 
-@registro_bp.route('/registro', methods=['POST'])
+#@registro_bp.route('/registro', methods=['POST'])
+@registro_bp.route('/api/registro', methods=['POST'])
 def registro():
     data = request.get_json()
     username = data.get('username')
