@@ -11,20 +11,26 @@ from mysql.connector import Error
 # ----------------------------------------------
 def get_db_connection():
     try:
+        print("🌐 Intentando conectar a la base de datos...")
+        print("HOST:", os.environ.get('DB_HOST'))
+        print("USER:", os.environ.get('DB_USER'))
+        print("DATABASE:", os.environ.get('DB_NAME'))
+
         connection = mysql.connector.connect(
             host=os.environ.get('DB_HOST'),
             user=os.environ.get('DB_USER'),
             password=os.environ.get('DB_PASSWORD'),
             database=os.environ.get('DB_NAME'),
-            port=os.environ.get('DB_PORT', 3306)  # Railway puede usar otro puerto
+            port=int(os.environ.get('DB_PORT', 3306))
         )
         if connection.is_connected():
+            print("✅ Conexión a la base de datos exitosa")
             return connection
         else:
-            print("❌ Error: conexión no establecida")
+            print("❌ Conexión fallida: connection no conectado")
             return None
     except Error as e:
-        print(f"❌ Error de conexión a la base de datos: {e}")
+        print(f"❌ Error al conectar a la base de datos: {e}")
         return None
 
 # ----------------------------------------------
