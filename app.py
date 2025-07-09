@@ -15,7 +15,9 @@ app = Flask(__name__)
 #CORS(app, resources={r"/api/*": {"origins": "*"}})  # Solo permite CORS en rutas /api/*
 # Permitir cualquier origen para cualquier ruta
 #CORS(app, resources={r"/*": {"origins": "*"}}, supports_credentials=True)
-CORS(app, resources={r"/api/*": {"origins": ["https://www.grupoexpertos.com"]}}, supports_credentials=True)
+#CORS(app, resources={r"/api/*": {"origins": ["https://www.grupoexpertos.com"]}}, supports_credentials=True)
+CORS(app, origins="*", allow_headers="*", methods=["GET", "POST", "OPTIONS"])
+
 app.secret_key = 'mi_clave_secreta'  # Clave para manejar sesiones seguras
 
 # ----------------------------------------------
