@@ -12,7 +12,8 @@ from routes.api_routes import api_bp           # API login facial
 # Inicializamos la aplicación Flask
 # ----------------------------------------------
 app = Flask(__name__)
-CORS(app, resources={r"/api/*": {"origins": "*"}})  # Solo permite CORS en rutas /api/*
+#CORS(app, resources={r"/api/*": {"origins": "*"}})  # Solo permite CORS en rutas /api/*
+CORS(app, resources={r"/api/*": {"origins": ["https://www.grupoexpertos.com"]}}, supports_credentials=True)
 app.secret_key = 'mi_clave_secreta'  # Clave para manejar sesiones seguras
 
 # ----------------------------------------------
