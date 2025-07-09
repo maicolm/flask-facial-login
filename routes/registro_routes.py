@@ -17,6 +17,7 @@ registro_bp = Blueprint('registro_bp', __name__)
 #@registro_bp.route('/registro', methods=['POST'])
 #@registro_bp.route('/api/registro', methods=['POST'])
 @registro_bp.route('/api/registro', methods=['POST', 'OPTIONS'])
+
 def registro():
     data = request.get_json()
     username = data.get('username')
