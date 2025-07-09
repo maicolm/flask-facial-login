@@ -2,7 +2,6 @@
 # app.py: Archivo principal de la aplicación Flask
 # ----------------------------------------------
 import os  # <--- Importación añadida para leer variables de entorno
-
 from flask import Flask
 from flask_cors import CORS
 
