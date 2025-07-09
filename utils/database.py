@@ -1,25 +1,35 @@
 # ----------------------------------------------
-# utils/database.py: Módulo para conexión con MySQL
+# utils/database.py: Módulo para conexión con MySQL usando variables de entorno
 # ----------------------------------------------
+
+import os
 import mysql.connector
 from mysql.connector import Error
 
-# Función para crear una conexión a la base de datos MySQL
-# Se usa en los controladores para acceder a la tabla de usuarios
-
+# ----------------------------------------------
+# Establecer conexión a la base de datos
+# ----------------------------------------------
 def get_db_connection():
     try:
         connection = mysql.connector.connect(
-            host='localhost',        # Servidor local
-            user='root',             # Usuario por defecto
-            password='',             # Contraseña (puedes cambiarla si aplica)
-            database='facial_login'  # Nombre de tu base de datos
+            host=os.environ.get('DB_HOST'),
+            user=os.environ.get('DB_USER'),
+            password=os.environ.get('DB_PASSWORD'),
+            database=os.environ.get('DB_NAME'),
+            port=os.environ.get('DB_PORT', 3306)  # Railway puede usar otro puerto
         )
-        return connection
+        if connection.is_connected():
+            return connection
+        else:
+            print("❌ Error: conexión no establecida")
+            return None
     except Error as e:
-        print(f"Error al conectar a la base de datos: {e}")
+        print(f"❌ Error de conexión a la base de datos: {e}")
         return None
 
+# ----------------------------------------------
+# Función para obtener el rol de un usuario por ID
+# ----------------------------------------------
 def obtener_rol_usuario(id_usuario):
     try:
         connection = get_db_connection()
@@ -32,5 +42,5 @@ def obtener_rol_usuario(id_usuario):
         connection.close()
         return resultado[0] if resultado else None
     except Exception as e:
-        print(f"Error al obtener rol: {e}")
+        print(f"Error al obtener el rol del usuario: {e}")
         return None
