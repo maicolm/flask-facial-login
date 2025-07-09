@@ -1,8 +1,9 @@
 # ----------------------------------------------
 # app.py: Archivo principal de la aplicación Flask
 # ----------------------------------------------
-from flask_cors import CORS
 from flask import Flask
+from flask_cors import CORS
+
 from routes.auth_routes import auth_bp         # Blueprint para autenticación (login, logout)
 from routes.registro_routes import registro_bp # Blueprint para registro facial
 from routes.usuario_routes import usuario_bp   # CRUD de usuarios
@@ -12,11 +13,8 @@ from routes.api_routes import api_bp           # API login facial
 # Inicializamos la aplicación Flask
 # ----------------------------------------------
 app = Flask(__name__)
-#CORS(app, resources={r"/api/*": {"origins": "*"}})  # Solo permite CORS en rutas /api/*
-# Permitir cualquier origen para cualquier ruta
-#CORS(app, resources={r"/*": {"origins": "*"}}, supports_credentials=True)
-#CORS(app, resources={r"/api/*": {"origins": ["https://www.grupoexpertos.com"]}}, supports_credentials=True)
-#CORS(app, origins="*", allow_headers="*", methods=["GET", "POST", "OPTIONS"])
+
+# Activar CORS para todos los orígenes y métodos
 CORS(app, resources={r"/*": {"origins": "*"}}, supports_credentials=True)
 
 app.secret_key = 'mi_clave_secreta'  # Clave para manejar sesiones seguras

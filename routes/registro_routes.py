@@ -4,21 +4,18 @@
 
 from flask import Blueprint, request, jsonify
 import cv2
-
-
-from utils.database import get_db_connection  # conexión MySQL
-from utils.face_processing import decode_image, save_image, entrenar_modelo, cargar_modelo  # ← aquí debe estar
-
-
+from utils.database import get_db_connection
+from utils.face_processing import decode_image, save_image, entrenar_modelo, cargar_modelo
 
 # Definimos correctamente el blueprint
 registro_bp = Blueprint('registro_bp', __name__)
 
-#@registro_bp.route('/registro', methods=['POST'])
-#@registro_bp.route('/api/registro', methods=['POST'])
 @registro_bp.route('/api/registro', methods=['POST', 'OPTIONS'])
-
 def registro():
+    # Respuesta CORS preflight
+    if request.method == 'OPTIONS':
+        return '', 200
+
     data = request.get_json()
     username = data.get('username')
     fotos = data.get('fotos', [])
@@ -40,7 +37,7 @@ def registro():
             cursor.close()
             conn.close()
 
-    # Verificamos si el rostro ya fue registrado con otro usuario
+    # Verificamos si el rostro ya fue registrado
     modelo = cargar_modelo()
     if modelo:
         img = decode_image(fotos[0])
@@ -50,13 +47,13 @@ def registro():
         if confidence < 50:
             return jsonify({'success': False, 'message': 'Este rostro ya está registrado'}), 409
 
-    # Insertamos el nuevo usuario en la base de datos
+    # Insertamos nuevo usuario
     try:
         conn = get_db_connection()
         cursor = conn.cursor()
         cursor.execute("INSERT INTO users (username, nivel) VALUES (%s, %s)", (username, 'administrador'))
         conn.commit()
-        user_id = cursor.lastrowid  # Usamos el ID como label
+        user_id = cursor.lastrowid
     except Exception as e:
         return jsonify({'success': False, 'message': f'Error al registrar usuario: {str(e)}'}), 500
     finally:
@@ -64,7 +61,7 @@ def registro():
             cursor.close()
             conn.close()
 
-    # Guardamos las imágenes con formato ID_1.jpg, ID_2.jpg...
+    # Guardamos las imágenes
     for i, foto_b64 in enumerate(fotos):
         img = decode_image(foto_b64)
         save_image(img, user_id, i + 1)
