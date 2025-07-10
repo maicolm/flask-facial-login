@@ -5,7 +5,8 @@ import cv2
 import numpy as np
 import base64
 from joblib import load
-
+from sklearn.linear_model import LogisticRegression
+import joblib
 # ----------------------------------------------
 # Configuraciones globales de rutas
 # ----------------------------------------------
@@ -75,3 +76,49 @@ def cargar_modelo_logistico():
     if os.path.exists(MODELO_LOGISTICO_PATH):
         return load(MODELO_LOGISTICO_PATH)
     return None
+
+
+# ----------------------------------------------
+# Función para detectar rostro, convertir a gris, recortar y redimensionar
+# ----------------------------------------------
+def detectar_y_preprocesar(img, size=(100, 100)):
+    """
+    Detecta un rostro en la imagen, lo convierte a escala de grises,
+    lo recorta y lo redimensiona al tamaño dado.
+    Retorna un vector listo para el modelo (flattened).
+    """
+    face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
+    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    faces = face_cascade.detectMultiScale(gray, scaleFactor=1.1, minNeighbors=5)
+
+    if len(faces) == 0:
+        return None  # No se detectó rostro
+
+    x, y, w, h = faces[0]
+    rostro = gray[y:y+h, x:x+w]
+    rostro_redimensionado = cv2.resize(rostro, size)
+    return rostro_redimensionado.flatten().reshape(1, -1)
+
+
+# ----------------------------------------------
+# Entrenamiento del modelo de regresión logística
+# ----------------------------------------------
+def entrenar_modelo_logistico():
+    X, y = [], []
+    for file in os.listdir(DATASET_PATH):
+        if file.endswith(".jpg"):
+            path = os.path.join(DATASET_PATH, file)
+            label = int(file.split('_')[0])
+            img = cv2.imread(path)
+            features = detectar_y_preprocesar(img)
+            if features is not None:
+                X.append(features[0])
+                y.append(label)
+
+    if X:
+        model = LogisticRegression(max_iter=1000)
+        model.fit(np.array(X), np.array(y))
+        joblib.dump(model, MODELO_LOGISTICO_PATH)
+        print("✅ Modelo de regresión logística entrenado y guardado.")
+    else:
+        print("⚠️ No se encontraron datos válidos para entrenar.")

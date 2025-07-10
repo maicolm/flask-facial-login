@@ -6,6 +6,7 @@ from flask import Blueprint, request, jsonify
 import cv2
 from utils.database import get_db_connection
 from utils.face_processing import decode_image, save_image, entrenar_modelo, cargar_modelo
+from utils.face_processing import entrenar_modelo_logistico  # <- ya importado
 
 # Definimos correctamente el blueprint
 registro_bp = Blueprint('registro_bp', __name__)
@@ -66,6 +67,8 @@ def registro():
         img = decode_image(foto_b64)
         save_image(img, user_id, i + 1)
 
+    # Entrenamiento de modelos
     entrenar_modelo()
+    entrenar_modelo_logistico()  # ✅ Añadido para actualizar el modelo de regresión logística
 
     return jsonify({'success': True, 'message': 'Usuario registrado con múltiples fotos'})
