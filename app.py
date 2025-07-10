@@ -9,6 +9,7 @@ from routes.auth_routes import auth_bp         # Blueprint para autenticación (
 from routes.registro_routes import registro_bp # Blueprint para registro facial
 from routes.usuario_routes import usuario_bp   # CRUD de usuarios
 from routes.api_routes import api_bp           # API login facial
+from routes.reinicio_routes import reinicio_bp
 
 # ----------------------------------------------
 # Inicializamos la aplicación Flask
@@ -27,6 +28,7 @@ app.register_blueprint(auth_bp)
 app.register_blueprint(registro_bp)
 app.register_blueprint(usuario_bp)
 app.register_blueprint(api_bp)
+app.register_blueprint(reinicio_bp)
 
 # ----------------------------------------------
 # Ruta de salud para verificar si Render está activo
