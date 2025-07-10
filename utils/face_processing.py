@@ -115,10 +115,18 @@ def entrenar_modelo_logistico():
                 X.append(features[0])
                 y.append(label)
 
-    if X:
-        model = LogisticRegression(max_iter=1000)
-        model.fit(np.array(X), np.array(y))
-        joblib.dump(model, MODELO_LOGISTICO_PATH)
-        print("✅ Modelo de regresión logística entrenado y guardado.")
-    else:
-        print("⚠️ No se encontraron datos válidos para entrenar.")
+    if not X:
+        mensaje = "⚠️ No se encontraron datos válidos para entrenar el modelo logístico."
+        print(mensaje)
+        return mensaje
+
+    if len(set(y)) < 2:
+        mensaje = "⚠️ No se entrenó el modelo logístico: se necesita al menos 2 usuarios diferentes."
+        print(mensaje)
+        return mensaje
+
+    model = LogisticRegression(max_iter=1000)
+    model.fit(np.array(X), np.array(y))
+    joblib.dump(model, MODELO_LOGISTICO_PATH)
+    print("✅ Modelo de regresión logística entrenado y guardado.")
+    return None

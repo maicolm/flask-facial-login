@@ -69,6 +69,10 @@ def registro():
 
     # Entrenamiento de modelos
     entrenar_modelo()
-    entrenar_modelo_logistico()  # ✅ Añadido para actualizar el modelo de regresión logística
+    advertencia_logistico = entrenar_modelo_logistico()
 
-    return jsonify({'success': True, 'message': 'Usuario registrado con múltiples fotos'})
+    return jsonify({
+        'success': True,
+        'message': 'Usuario registrado exitosamente.',
+        'advertencia': advertencia_logistico or ''
+    })
